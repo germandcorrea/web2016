@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>libros IT</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Buscar Libos de IT</h3>
+            </div>
+            <!-- identificar el formulario utilizando la propiedad id para poder encontrarlo desde el código javascript -->
+            <form class="form" action="#" method="post" id="formBuscar">
+            <div class="panel-body">
+                <div class="form-group">
+                  <label for="titulo">Título del libro</label>
+                  <!-- identificar la caja de texto para poder usar desde javascript -->
+                  <input type="text" class="form-control" id="titulo" placeholder="Ingrese el nombre del título">
+                  <p class="help-block">Palabras que se encuentran en el título del libro</p>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+                <button type="submit" name="button" class="btn btn-primary">
+                    <i class="fa fa-search"></i>&nbsp;Buscar
+                </button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!-- identificar el div donde se mostraran los resultados -->
+      <div class="row" id="resultado">
+        <div class="col-md-4 col-sm-6 hide">
+          <div class="thumbnail">
+            <img src="http://img.lagaceta.com.ar/fotos/notas/2016/09/22/575x332_700245_20160922153507.jpg" alt="...">
+            <div class="caption">
+              <h3>tÍtulo libro</h3>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      //el evento ready se dispara cuando el documento se carga completamente
+      $(document).ready(function(){
+        //definir una variable que contiene la url de la api web
+        var apiURL="http://it-ebooks-api.info/v1";
+        //asociar el evento submit del formulario de busqueda, este evento se dispara cuando se envía el formulario
+        //ya sea cuando se presiona la tecla enter o cuando se hace click en el boton de busqueda
+        $(document).on('submit', '#formBuscar', function(event) {
+          //cancelamos el comportamiento por defecto del formulario
+          event.preventDefault();
+          console.log('enviar!!!');
+          //obtenemos el valor que escribio el usuario en la caja de texto
+          var titulo = $('#titulo').val();
+          //obtenemos del div donde dibujaremos el resultado.
+          var $divResultado= $('#resultado');
+          //generamos una solicitud asincronica al api por medio de la url.
+          //en el momento que llegue la respuesta se ejecutará el callback done
+          //pasando como parametro los datos de la respuesta en el parámetro denomminado por nosotros data
+          $.ajax({
+            url: apiURL+'/search/'+titulo,
+          }).done(function(data) {
+            //este callback se ejecuta cuando la respuesta es procesada
+            console.log("done");
+            console.log(data);
+            //limpiamos el div de reesultados
+            $divResultado.text('');
+            //una de las propiedades del objeto retornandos (data.Books) es un array de libros
+            //podemos iterar sobre ellos con la funcion each
+            //a la función each se pasa el array de libros más un callback que recibe cada uno de los libros (libro)
+            //junto a la posicion(index) que ocupa en el array.
+            $.each(data.Books, function(index, libro) {
+              console.log(index);
+              //generamos la plantilla html de cada libro, generando un array de cadenas
+              var htmlLibro=[
+              '<div class="col-md-8 col-md-offset-2">',
+              '  <div class="thumbnail">',
+              '    <img src="'+libro.Image+'" alt="...">',
+              '    <div class="caption">',
+              '      <h3>'+libro.Title+'<small>'+libro.SubTitle+'</small></h3>',
+              '      <p>'+libro.Description+'</p>',
+              '    </div>',
+              '  </div>',
+              '</div>'
+              ];
+              //concatenamos el array de strings htmlLibro con la función join
+              //utilizando como separador un espacio en blanco
+              //lueog agregamos la plantilla del libro al div de resultados
+              $divResultado.append(htmlLibro.join(' '));
+            }); //$.each(data.Books, function(index, libro)
+          }).error(function() {
+            console.error("Fallo la solicitud al api");
+            alert("Fallo la solicitud al api");
+          }); //$.ajax
+        }); //$(document).on('submit', '#formBuscar', function(event)
+      }); //$(document).ready(function()
+    </script>
+  </body>
+</html>
