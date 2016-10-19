@@ -91,3 +91,54 @@ una vez instalado el módulo es necesario reiniciar el servicio de apache para q
 ```bash
 sudo service apache2 restart
 ```
+## Scripts PHP con acceso bases de datos MySQL
+para poder acceder a la base de datos de MySQL es conveniente usar la libreria PDO [http://php.net/manual/es/book.pdo.php](http://php.net/manual/es/book.pdo.php)
+quien tendrá de responsablidad de proporcionar una capa de abstracción para manipular bases de datos dependientemente del fabricante es decir el código php será el mismo sin importar si la Base de datos es MySQL, PostgreSQL, Sqlite, Sql Server, Oracle, etc. no así la sintaxis SQL implementada en cada motor.
+
+vamos a crear una carpeta en el DocumentRoot del servidor Apache (**/var/www/html**) con el nombre de la comisión por ejemplo **3k4**.
+
+```bash
+mkdir /var/www/html/3k4
+```
+
+ahora abrimos el editor de texto atom en ese directorio.
+
+```bash
+atom /var/www/html/3k4
+```
+
+generamos un archivo denominado **cnn.php** donde pondremos los parametros de conexión a la base de datos.
+
+```php
+<?php
+$dsn='mysql: host=localhost; dbname=employees';
+$usuario='root';
+$password='datos';
+try{
+  $cnn=new PDO($dsn,$usuario,$password);
+}catch(PDOException $e){
+  die('Error al conectarse a la base de datos: <br>'.$e->getMessage());
+}
+```
+
+ahora generamos el archivo **departamentos.php** qeu tendrá la responsabilidad de mostrar un listado de los departamentos de la base de datos.
+
+```php
+<?php
+/*
+incluimos el archivo de la conexión a la base de datos.
+entonces ahora podremos usar las variables definidas en el archivo cnn.php como por ejemplo $cnn;
+*/
+include 'cnn.php';
+
+/*
+generamos una variable $sql que contiene la consulta sql que enviaremos a la base de datos.
+*/
+$sql = 'select * from departments';
+try{
+  $query=$cnn->prepare($sql);
+  $departamentos=$query->execute();
+}catch(PDOException $e){
+  die('Error en la consulta: <br>'.$e->getMessage());
+}
+```
