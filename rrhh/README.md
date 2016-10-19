@@ -22,6 +22,12 @@ mysql -t -u root -p < employees.sql
 
 **-p** va a pedir la contraseña del usuario, en nuestra maquina virtual la contraseña del usuario root de mysql es **datos**
 
+si cuando restauramos la base de datos nos muestra en error de **storage_engine** es necesario editar el archivo de employees.sql y reemplazar donde aparece la palabra **storage_engine** por **default_storage_engine**.
+abrimos el editor atom en el directorio actual.
+
+```bash
+atom .
+```
 comprobar la estructura y datos de la base de datos.
 ```bash
 time mysql -u root -p -t < test_employees_md5.sql
