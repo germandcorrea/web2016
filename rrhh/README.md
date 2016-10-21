@@ -1,6 +1,7 @@
 # RRHH
 ## LAMP
 **L**inux, **A**pache, **M**ySQL y **P**HP
+
 Para el curso vamos a usar una maquina virtual que tiene instalado lubuntu 16.04, con casi todos los componentes necesarios para poder desarrollar aplicaciones web.
 
 Para lo cual tendremos un usuario que usamos normalmente para trabajar en la maquina virtual.
