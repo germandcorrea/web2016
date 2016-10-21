@@ -1,7 +1,16 @@
 # RRHH
-## LAMP **L**inux, **A**pache, **M**ySQL y **P**HP
+## LAMP
+**L**inux, **A**pache, **M**ySQL y **P**HP
+Para el curso vamos a usar una maquina virtual que tiene instalado lubuntu 16.04, con casi todos los componentes necesarios para poder desarrollar aplicaciones web.
+para lo cual tendremos un usuario que usamos normalmente para trabajar en la maquina virtual.
+### maquina virtual
+usuario: **web**
+contraseña: **web**
 
 ## Base de datos (MySQL)
+usuario: **root**
+contraseña: **datos**
+
 vamos a utilizar la base de datos de Recursos Humanos que ofrece MySQL [https://dev.mysql.com/doc/employee/en/](https://dev.mysql.com/doc/employee/en/) para luego generar una interfaz web que manipule los datos.
 
 debemos descargar la base de datos de ejemplo desde [https://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2]( https://launchpad.net/test-db/employees-db-1/1.0.6/+download/employees_db-full-1.0.6.tar.bz2)
