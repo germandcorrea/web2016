@@ -129,6 +129,7 @@ ahora generamos el archivo **departamentos.php** qeu tendrá la responsabilidad 
 incluimos el archivo de la conexión a la base de datos.
 entonces ahora podremos usar las variables definidas en el archivo cnn.php como por ejemplo $cnn;
 */
+
 include 'cnn.php';
 
 /*
@@ -136,9 +137,72 @@ generamos una variable $sql que contiene la consulta sql que enviaremos a la bas
 */
 $sql = 'select * from departments';
 try{
+  /*
+  preparamos la consulta sql
+  */
+  // http://php.net/manual/es/pdo.prepared-statements.php
   $query=$cnn->prepare($sql);
-  $departamentos=$query->execute();
+  /* ejecutamos la consulta */
+  //http://php.net/manual/es/pdostatement.execute.php
+  $query->execute();
+  /* obtenemos los todos los registros de la consulta y lo almacenamos en la variable $departamentos */
+  //http://php.net/manual/es/pdostatement.fetchall.php
+  $departamentos=$query->fetchAll();
+  /*
+  nuevamente podríamos cometer algún error al enviar la consulta sql y obtener los datos desde la base de datos. entonces debemos capturar la excepción y tratarla
+  */
 }catch(PDOException $e){
   die('Error en la consulta: <br>'.$e->getMessage());
 }
+//podemos ver el array retornado con la siguiente línea
+//print_r($departamentos);
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>departamentos</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container">
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+          <tr>
+            <th>#</th>
+            <th>departamento</th>
+          </tr>
+          <!-- http://php.net/manual/es/language.control-structures.php -->
+          <!-- http://php.net/manual/es/control-structures.alternative-syntax.php -->
+          <!-- iteramos sobre el array de departamentos ($departamentos) para generar una fila de una tabla con cada uno de los registros de la iteración, almacenamos en la variable $depto -->
+          <?php foreach ($departamentos as $depto): ?>
+            <tr>
+              <td><?php echo $depto['dept_no']; ?></td>
+              <td>
+                <!-- se puede usar la notación alternativa para imprimir valores simples, pero tener cuidado no simpre está activa está opción (short_open_tags) en la configuración de php http://php.net/manual/es/language.basic-syntax.phptags.php -->
+                <?= $depto['dept_name'] ?>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </table>
+      </div> <!-- /div.table-responsive -->
+    </div><!-- /div.container -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  </body>
+</html>
 ```
