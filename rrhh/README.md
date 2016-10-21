@@ -1,4 +1,6 @@
 # RRHH
+## LAMP **L**inux, **A**pache, **M**ySQL y **P**HP
+
 ## Base de datos (MySQL)
 vamos a utilizar la base de datos de Recursos Humanos que ofrece MySQL [https://dev.mysql.com/doc/employee/en/](https://dev.mysql.com/doc/employee/en/) para luego generar una interfaz web que manipule los datos.
 
