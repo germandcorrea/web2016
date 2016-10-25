@@ -2,7 +2,7 @@
 ## LAMP
 **L**inux, **A**pache, **M**ySQL y **P**HP
 
-Para el curso vamos a usar una maquina virtual que tiene instalado lubuntu 16.04, con casi todos los componentes necesarios para poder desarrollar aplicaciones web.
+Para el curso vamos a usar una maquina virtual que tiene instalado lubuntu 16.04, con la mayoria de los componentes necesarios para poder desarrollar aplicaciones web.
 
 Para lo cual tendremos un usuario que usamos normalmente para trabajar en la maquina virtual.
 
@@ -49,7 +49,7 @@ time mysql -u root -p -t < test_employees_md5.sql
 
 conectar mysql Workbench para trabajar con la base de datos
 
-## Servidor WEB apache 2
+## Servidor WEB Apache 2
 en la maquina virtual está instalado el Servidor Web apache 2, hay que verificar que apache entienda el lenguaje php.
 
 verificamos los permisos de la carpeta DocumentRoot de apache que se encuentra en /var/www/html
@@ -106,8 +106,9 @@ una vez instalado el módulo es necesario reiniciar el servicio de apache para q
 sudo service apache2 restart
 ```
 ## Scripts PHP con acceso bases de datos MySQL
+
 para poder acceder a la base de datos de MySQL es conveniente usar la libreria PDO [http://php.net/manual/es/book.pdo.php](http://php.net/manual/es/book.pdo.php)
-quien tendrá de responsablidad de proporcionar una capa de abstracción para manipular bases de datos dependientemente del fabricante es decir el código php será el mismo sin importar si la Base de datos es MySQL, PostgreSQL, Sqlite, Sql Server, Oracle, etc. no así la sintaxis SQL implementada en cada motor.
+quien tendrá de responsablidad de proporcionar una capa de abstracción para manipular bases de datos independientemente del fabricante es decir el código php será el mismo sin importar si la Base de Datos es MySQL, PostgreSQL, Sqlite, Sql Server, Oracle, etc. no así la sintaxis SQL implementada en cada motor.
 
 vamos a crear una carpeta en el DocumentRoot del servidor Apache (**/var/www/html**) con el nombre de la comisión por ejemplo **3k4**.
 
@@ -135,7 +136,7 @@ try{
 }
 ```
 
-ahora generamos el archivo **departamentos.php** qeu tendrá la responsabilidad de mostrar un listado de los departamentos de la base de datos.
+ahora generamos el archivo **departamentos.php** que tendrá la responsabilidad de mostrar un listado de los departamentos de la base de datos.
 
 ```php
 <?php
@@ -220,3 +221,9 @@ try{
   </body>
 </html>
 ```
+## Ejercicios
+
+1. Mostrar un listado de los departamentos, indicando el nombre de los departamentos junto a los apellidos y nombres del jefe actual, como así también la fecha desde cuando ocupa ese cargo.
+2. El Listado debé permitir filtrar los datos por nombre de departmento.
+3. Al seleccionar un departamento mostrar apellido y nombre del jefe departamento junto a la fecha desde donde comenzó a trabajar en ese departamento, además un listado que contenga los mismos datos de cada empleado del departamento.
+4. Al seleccionar un empleado, mostrar los departamentos donde fue jefe y el periodo, también mostrar todos los departamentos donde presto servicio junto al periodo.
