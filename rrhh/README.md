@@ -1,3 +1,16 @@
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [RRHH](#rrhh)
+	- [LAMP](#lamp)
+	- [Base de datos (MySQL)](#base-de-datos-mysql)
+	- [Servidor WEB Apache 2](#servidor-web-apache-2)
+	- [Scripts PHP con acceso bases de datos MySQL](#scripts-php-con-acceso-bases-de-datos-mysql)
+	- [Ejercicios](#ejercicios)
+		- [Ejercicios 1 y 2 resueltos](#ejercicios-1-y-2-resueltos)
+		- [Ejercicios 3](#ejercicios-3)
+		- [Ejercicios 4](#ejercicios-4)
+
+<!-- /TOC -->
 # RRHH
 ## LAMP
 **L**inux, **A**pache, **M**ySQL y **P**HP
