@@ -6,9 +6,10 @@
 	- [Servidor WEB Apache 2](#servidor-web-apache-2)
 	- [Scripts PHP con acceso bases de datos MySQL](#scripts-php-con-acceso-bases-de-datos-mysql)
 	- [Ejercicios](#ejercicios)
-		- [Ejercicios 1 y 2 resueltos](#ejercicios-1-y-2-resueltos)
-		- [Ejercicios 3](#ejercicios-3)
-		- [Ejercicios 4](#ejercicios-4)
+		- [Ejercicios Resueltos](#ejercicios-resueltos)
+			- [Ejercicios 1 y 2](#ejercicios-1-y-2)
+			- [Ejercicios 3](#ejercicios-3)
+			- [Ejercicios 4](#ejercicios-4)
 
 <!-- /TOC -->
 # RRHH
@@ -241,7 +242,10 @@ try{
 3. Al seleccionar un departamento mostrar apellido y nombre del jefe departamento junto a la fecha desde donde comenzó a trabajar en ese departamento, además un listado que contenga los mismos datos de cada empleado del departamento.
 4. Al seleccionar un empleado, mostrar los departamentos donde fue jefe y el periodo, también mostrar todos los departamentos donde presto servicio junto al periodo.
 
-### Ejercicios 1 y 2 resueltos
+### Ejercicios Resueltos
+
+#### Ejercicios 1 y 2
+
 generamos el archivo **departamentos.php**
 
 ```php
@@ -366,7 +370,7 @@ try{
   </body>
 </html>
 ```
-### Ejercicios 3
+#### Ejercicios 3
 
 generamos el archivo **departamento-show.php**
 
@@ -503,7 +507,7 @@ try{
 </html>
 ```
 
-### Ejercicios 4
+#### Ejercicios 4
 
 generamos el archivo **empleado-show.php**
 
