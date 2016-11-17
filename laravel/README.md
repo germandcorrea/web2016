@@ -64,8 +64,20 @@ También es necesario agregar el sigeuinte elemento al array de **aliases**
 ```
 
 ### Generar la autentificación de usuarios
+
 ```bash
 php artisan make:auth
+```
+
+### Configurar la conexión a la base de Datos
+los parámetros de conexión deben modificarse en el archivo **.env**, laravel buscará la configuración de la aplicación primero desde variables de entorno del sistema operativo, luego desde el archivo **.env**, por último desde los valores por defecto.
+
+la estructura del archivo es **clave=valor** debemos buscar y modificar los valores de las claves que inician con **DB_**.
+
+```php
+DB_DATABASE=miBaseDeDatos
+DB_USERNAME=miUsuario
+DB_PASSWORD=miContraseña
 ```
 
 ### Migrar la base de datos
@@ -135,6 +147,29 @@ Route::get('/home', 'HomeController@index');
 De esa Ruta podemos inferir que cuando un cliente solicite la ruta **/home** con verbo http **GET** se ejecutará el método **index** de la clase **HomeController**.
 
 
+## Agregar la dependencia **laracasts/generators**
+
+https://github.com/laracasts/Laravel-5-Generators-Extended
+
+Con está librería vamos a agregar comandos a **artisan** para generar las migraciones de forma más simple.
+
+```bash
+composer require laracasts/generators --dev
+```
+
+Registrar la librería para que funcione en el entorno de desarrollo, buscamos el archivo **app/Providers/AppServiceProvider.php** y en el método **register** agregamos
+
+```php
+if ($this->app->environment() == 'local') {
+	$this->app->register(\Laracasts\Generators\GeneratorsServiceProvider::class);
+}
+```
+
+Los nuevos comandos de artisan son:
+- make:migration:schema
+- make:migration:pivot
+- make:seed
+
 
 
 ## Habilitar la dependencia l5scaffold
@@ -157,4 +192,107 @@ Registrar el Service Provider en el archivo **config/app.php**, buscar el array
 Laralib\L5scaffold\GeneratorsServiceProvider::class,
 ```
 
-ahora se agregó un nuevo comando en artisan **make:scaffold**
+ahora se agregó un nuevo comando en artisan **make:scaffold** que necesita minimamente dos parámetros, el primero es el nombre de la Clase de Modelo y como segundo el parámetro el esquema del modelo con la opción **--schema** que tiene una cadena donde se define la estructura y restricciones de los atributos, con un formato simple, cada atributo está definido indicando **nombre_atributo:tipo_de_dato:restricciones_separadas_por_dos_puntos** y separando cada atributo por una "coma".
+
+por ejemplo podemos generar un modelo denominado **Tweet** con los atributos **title** de tipo **string** con un valor por defecto **Tweet #1**, más el atributo **body** de tipo **text**
+
+```bash
+php artisan make:scaffold Tweet --schema="title:string:default('Tweet #1'), body:text"
+```
+
+
+## Desplegar la aplicación en Heroku
+
+https://devcenter.heroku.com/articles/getting-started-with-laravel
+
+lo primero que necesitamos es crear una cuenta en heroku, es gratuito para eso hay que ir a la página de heroku.com y registarse.
+luego es necesario instalar la herramienta de linea de comandos para comunicarse con heroku.
+
+```bash
+wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh
+```
+
+inciar Sesión en heroku, nos va a pedir el correo electronico y la passaword con la que nos registramos en el sitio.
+
+```bash
+heroku login
+```
+
+Generar el archivo **Procfile** donde indicamos que vamos a usar como servidor WEB una instancia de apache2 con php configurado apuntando **DocumentRoot** al directorio **public** de nuestra aplicación.  
+
+```bash
+echo "web: vendor/bin/heroku-php-apache2 public/" > Procfile
+```
+
+Heroku como la mayoría de servicios web en la nube, utilizan **GIT** para subir los archivos al repositorio del servidor. Por lo tanto es necesario iniciar un repositorio git dentro de nuestro proyecto **git init**, agregar todos los archivos del proyecto al repositorio **git add .** y por ultimo confirmar los que los archivos estan listos en nuestro repositorio **git commit -m "app: inicio de repositorio"**, todos esto es en nuestro repositorio local.
+
+```bash
+git init
+git add .
+git commit -m "app: inicio de repositorio"
+```
+
+crear la aplicación
+
+```
+heroku create adm-proy-app-germandcorrea
+```
+
+por defecto Heroku entiende que nuestra aplicación se va a desarrollar en **nodejs** de modo que debemos especificarle un build pack correspondientes a **PHP**
+
+```bash
+heroku buildpacks:set heroku/php
+```
+
+agregar PostgreSQL a nuestra aplicación en el servidor de heroku, luego podremos ver que en el heroku tenemos una variable de entorno **DATABASE_URL** que contiene los parámetros de conección hacia el servidor de base de datos.
+
+```bash
+heroku addons:create heroku-postgresql:hobby-dev
+```
+
+declaramos las variables que necesita laravel, para funcionar.
+configuramos las variables de entorno en el servidor de heroku, es decir las variables que teniamos definidas en nuestro archivo **.env** tienen que definirse como variables de entorno en los servidores de heroku.
+
+variables para la clave secreta de la aplicación.
+
+```bash
+heroku config:set APP_KEY=$(php artisan key:generate --show)
+```
+
+
+variables para la configuración de la Base de Datos.
+
+si ejecutamos el siguiente comando podremos ver las variables de entorno que tiene nuestra instancia de heroku.
+```bash
+heroku config -s
+```
+el comando anterior nos mostrará una variable **DATABASE_URL** con un formato parecido al siguiente
+
+**DATABASE_URL='postgres://usuario:contraseña@host:5432/base_de_datos'**
+
+entonces debemos descomponer esa url, que tiene todos los parámetros de conexión a la base de datos juntos, que nos proporción heroku, para luego generar cada una de las variables que necesita laravel para conectarse.
+
+```bash
+heroku config:set DB_CONNECTION=pgsql
+heroku config:set DB_HOST=host
+heroku config:set DB_USERNAME=usuario
+heroku config:set DB_PASSWORD=contraseña
+heroku config:set DB_DATABASE=base_de_datos
+```
+
+una vez configurada la application es hora de subir la aplicación al servidor de Heroku, nuevamente mediante **GIT**
+
+```bash
+git push heroku master
+```
+
+Corremos las migraciones en el servidor de heroku
+
+```bash
+heroku run php artisan migrate
+```
+
+Lanzamos nuestra aplicaión en el navegador web
+```bash
+heroku open
+```
